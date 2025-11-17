@@ -1,12 +1,14 @@
 {
-  "name": "fast-react-pizza",
-  "private": true,
+  "name": "bookshelf-react",
+  "private": false,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://AdamsCode782.github.io/bookshelf-react",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
@@ -23,6 +25,7 @@
     "autoprefixer": "^10.4.14",
     "eslint": "^8.39.0",
     "eslint-config-react-app": "^7.0.1",
+    "gh-pages": "^5.0.0",
     "postcss": "^8.4.23",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.2.8",

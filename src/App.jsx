@@ -1,36 +1,29 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { HashRouter, Routes, Route } from "react-router-dom";
 
-import Home from './ui/Home';
-import Error from './ui/Error';
-import Browse, { loader as menuLoader } from './features/browse/Browse';
+import Home from "./ui/Home";
+import Error from "./ui/Error";
+import Browse, { loader as menuLoader } from "./features/browse/Browse";
 import ReadingList from "./features/readinglist/ReadingList";
 
-
-import AppLayout from './ui/AppLayout';
-
-const router = createBrowserRouter([
-  {
-    element: <AppLayout />,
-    errorElement: <Error />,
-
-    children: [
-      {
-        path: '/',
-        element: <Home />,
-      },
-      {
-        path: '/browse',
-        element: <Browse />,
-        loader: menuLoader,
-        errorElement: <Error />,
-      },
-      { path: '/reading-list', element: <ReadingList /> },
-    ],
-  },
-]);
+import AppLayout from "./ui/AppLayout";
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <HashRouter>
+      <AppLayout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/browse"
+            element={<Browse />}
+            loader={menuLoader}
+          />
+          <Route path="/reading-list" element={<ReadingList />} />
+          <Route path="*" element={<Error />} />
+        </Routes>
+      </AppLayout>
+    </HashRouter>
+  );
 }
 
 export default App;
