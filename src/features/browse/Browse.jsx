@@ -7,7 +7,7 @@ import Modal from "../../ui/Modal";
 function Browse() {
   const { books: initialBooks, defaultGenre } = useLoaderData();
   const [books, setBooks] = useState(initialBooks);
-  const [genre, setGenre] = useState(defaultGenre); 
+  const [genre, setGenre] = useState(defaultGenre);
 
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("query");
@@ -17,12 +17,18 @@ function Browse() {
 
   useEffect(() => {
     async function fetchBooks() {
+      // If user searches a new term, update the list:
       if (searchQuery && searchQuery !== genre) {
-        const result = await getBooks(searchQuery, 20);
-        setBooks(result);
-        setGenre(searchQuery);
+        try {
+          const result = await getBooks(searchQuery, 20);
+          setBooks(result);
+          setGenre(searchQuery);
+        } catch (err) {
+          console.error("Error fetching new books:", err);
+        }
       }
     }
+
     fetchBooks();
   }, [searchQuery, genre]);
 
@@ -74,10 +80,17 @@ export async function loader() {
     "biography",
     "young adult",
   ];
-  const randomTopic = topics[Math.floor(Math.random() * topics.length)];
-  const books = await getBooks(randomTopic, 20);
 
-  return { books, defaultGenre: randomTopic };
+  const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+
+  // GitHub Pages sometimes blocks loader fetches if not correct:
+  try {
+    const books = await getBooks(randomTopic, 20);
+    return { books, defaultGenre: randomTopic };
+  } catch (err) {
+    console.error("Loader failed:", err);
+    return { books: [], defaultGenre: randomTopic };
+  }
 }
 
 export default Browse;
