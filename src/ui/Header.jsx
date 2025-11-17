@@ -6,20 +6,26 @@ function Header() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Read ?query from current URL
   const urlParams = new URLSearchParams(location.search);
   const initialQuery = urlParams.get("query") || "";
-
   const [query, setQuery] = useState(initialQuery);
 
+  // IMPORTANT FIX:
+  // Update query ONLY when on /browse (not /menu)
   useEffect(() => {
-    if (location.pathname === "/menu") {
+    if (location.pathname === "/browse") {
       const params = new URLSearchParams();
       if (query) params.set("query", query);
-      navigate({ pathname: "/menu", search: params.toString() }, { replace: true });
+
+      navigate(
+        { pathname: "/browse", search: params.toString() },
+        { replace: true }
+      );
     }
   }, [query, location.pathname, navigate]);
 
-  const isMenuPage = location.pathname === "/browse";
+  const isBrowsePage = location.pathname === "/browse";
 
   return (
     <header className="flex flex-col sm:flex-row items-center justify-between border-b border-stone-200 bg-indigo-600 px-4 py-3 sm:px-6 text-white">
@@ -31,8 +37,7 @@ function Header() {
       </Link>
 
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-        {/* Only show search bar on /browse */}
-        {isMenuPage && (
+        {isBrowsePage && (
           <input
             type="text"
             placeholder="Search title or author..."

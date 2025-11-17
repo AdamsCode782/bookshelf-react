@@ -25,7 +25,6 @@ const userSlice = createSlice({
       try {
         localStorage.setItem(STORAGE_KEY_USER, action.payload);
       } catch (e) {
-        // ignore storage errors
       }
     },
   },
