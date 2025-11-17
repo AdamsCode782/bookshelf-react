@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import Modal from "../../ui/Modal";
 
 function Browse() {
-  const { books: initialBooks, defaultGenre } = useLoaderData();
+  const loaderData = useLoaderData() || { books: [], defaultGenre: "fiction" };
+
+  const { books: initialBooks, defaultGenre } = loaderData;
   const [books, setBooks] = useState(initialBooks);
   const [genre, setGenre] = useState(defaultGenre);
 
@@ -17,18 +19,16 @@ function Browse() {
 
   useEffect(() => {
     async function fetchBooks() {
-      // If user searches a new term, update the list:
       if (searchQuery && searchQuery !== genre) {
         try {
           const result = await getBooks(searchQuery, 20);
           setBooks(result);
           setGenre(searchQuery);
         } catch (err) {
-          console.error("Error fetching new books:", err);
+          console.error("Failed to fetch books", err);
         }
       }
     }
-
     fetchBooks();
   }, [searchQuery, genre]);
 
@@ -80,17 +80,10 @@ export async function loader() {
     "biography",
     "young adult",
   ];
-
   const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+  const books = await getBooks(randomTopic, 20);
 
-  // GitHub Pages sometimes blocks loader fetches if not correct:
-  try {
-    const books = await getBooks(randomTopic, 20);
-    return { books, defaultGenre: randomTopic };
-  } catch (err) {
-    console.error("Loader failed:", err);
-    return { books: [], defaultGenre: randomTopic };
-  }
+  return { books, defaultGenre: randomTopic };
 }
 
 export default Browse;
