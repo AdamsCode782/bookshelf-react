@@ -10,7 +10,7 @@ export async function getBooks(query = "popular fiction", maxResults = 20) {
   try {
     const q = encodeURIComponent(query.trim() || "popular fiction");
     const res = await fetch(
-      `${GOOGLE_BOOKS_API}?q=${q}&maxResults=${Math.min(maxResults, 40)}&printType=books&orderBy=relevance`
+      `${GOOGLE_BOOKS_API}?q=${q}&maxResults=${Math.min(maxResults, 40)}&printType=books&orderBy=relevance&key=${import.meta.env.VITE_GOOGLE_BOOKS_KEY}`
     );
 
     if (!res.ok) throw new Error("Failed fetching books from Google Books API");
@@ -40,8 +40,8 @@ export async function getBooks(query = "popular fiction", maxResults = 20) {
       // Determine a good preview link
       const googlePlayLink = `https://play.google.com/store/books/details?id=${item.id}`;
       const previewLink =
-        access.webReaderLink ||
         volume.previewLink ||
+        access.webReaderLink ||
         sale.buyLink ||
         googlePlayLink;
 
