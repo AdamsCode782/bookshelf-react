@@ -35,7 +35,7 @@ export async function getBooks(query = "popular fiction", maxResults = 20) {
 
       if (imageUrl.startsWith("http:")) imageUrl = imageUrl.replace("http:", "https:");
       if (!imageUrl)
-        imageUrl = "https://via.placeholder.com/128x192?text=No+Cover";
+        imageUrl = "https://placehold.co/128x192?text=No+Cover";
 
       // Determine a good preview link
       const googlePlayLink = `https://play.google.com/store/books/details?id=${item.id}`;
